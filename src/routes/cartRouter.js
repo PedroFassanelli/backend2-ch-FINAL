@@ -1,121 +1,51 @@
 import { Router } from 'express';
-import { productDBManager } from '../dao/productDBManager.js';
-import { cartDBManager } from '../dao/cartDBManager.js';
+import passport from 'passport';
+import { authorizeRoles } from '../middlewares/authorization.js';
+import cartController from '../controllers/cartController.js';
 
 const router = Router();
-const ProductService = new productDBManager();
-const CartService = new cartDBManager(ProductService);
 
-router.get('/:cid', async (req, res) => {
+router.get('/:cid', cartController.getCartById);
 
-    try {
-        const result = await CartService.getProductsFromCartByID(req.params.cid);
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
+// Crear un carrito
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  authorizeRoles(['user']),
+  cartController.createCart
+);
 
-router.post('/', async (req, res) => {
+// Solo usuarios autenticados con rol 'user' pueden modificar su carrito
+router.post('/:cid/product/:pid',
+  passport.authenticate('jwt', { session: false }),
+  authorizeRoles(['user']),
+  cartController.addProductToCart
+);
 
-    try {
-        const result = await CartService.createCart();
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
+router.delete('/:cid/product/:pid',
+  passport.authenticate('jwt', { session: false }),
+  authorizeRoles(['user']),
+  cartController.removeProduct
+);
 
-router.post('/:cid/product/:pid', async (req, res) => {
+// Reemplazar productos del carrito
+router.put(
+  '/:cid',
+  passport.authenticate('jwt', { session: false }),
+  authorizeRoles(['user']),
+  cartController.replaceProducts
+);
 
-    try {
-        const result = await CartService.addProductByID(req.params.cid, req.params.pid)
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
+router.put('/:cid/product/:pid',
+  passport.authenticate('jwt', { session: false }),
+  authorizeRoles(['user']),
+  cartController.updateQuantity
+);
 
-router.delete('/:cid/product/:pid', async (req, res) => {
-
-    try {
-        const result = await CartService.deleteProductByID(req.params.cid, req.params.pid)
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
-
-router.put('/:cid', async (req, res) => {
-
-    try {
-        const result = await CartService.updateAllProducts(req.params.cid, req.body.products)
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
-
-router.put('/:cid/product/:pid', async (req, res) => {
-
-    try {
-        const result = await CartService.updateProductByID(req.params.cid, req.params.pid, req.body.quantity)
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
-
-router.delete('/:cid', async (req, res) => {
-
-    try {
-        const result = await CartService.deleteAllProducts(req.params.cid)
-        res.send({
-            status: 'success',
-            payload: result
-        });
-    } catch (error) {
-        res.status(400).send({
-            status: 'error',
-            message: error.message
-        });
-    }
-});
+router.delete('/:cid',
+  passport.authenticate('jwt', { session: false }),
+  authorizeRoles(['user']),
+  cartController.clearCart
+);
 
 export default router;

@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { UserModel } from '../dao/models/userModel.js';
+import UserModel from '../dao/models/userModel.js';
 import dotenv from 'dotenv';
 
 dotenv.config();

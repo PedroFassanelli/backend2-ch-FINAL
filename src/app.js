@@ -48,5 +48,5 @@ mongoose.connect(process.env.MONGO_URL, {
     app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
   }).catch(err => console.error('Error al conectar a MongoDB', err));
 
-//const io = new Server(httpServer);
-//websocket(io);
+// const io = new Server(httpServer);
+// websocket(io);
