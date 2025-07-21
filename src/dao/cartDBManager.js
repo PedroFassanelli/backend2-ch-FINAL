@@ -18,8 +18,8 @@ class cartDBManager {
         return cart;
     }
 
-    async createCart() {
-        return await cartModel.create({products: []});
+    async createCart(uid) {
+        return await cartModel.create({user: uid, products: []});
     }
 
     async addProductByID(cid, pid) {
