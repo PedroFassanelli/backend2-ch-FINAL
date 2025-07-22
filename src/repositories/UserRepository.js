@@ -1,33 +1,15 @@
-import UserModel from '../dao/models/userModel.js';
+import UserDBManager from "../dao/userDBManager.js";
+
+const userDAO = new UserDBManager();
 
 class UserRepository {
-  async getAll() {
-    return await UserModel.find();
-  }
-
-  async getById(id) {
-    return await UserModel.findById(id);
-  }
-
-  async create(data) {
-    return await UserModel.create(data);
-  }
-
-  async getByEmail(email) {
-    return await UserModel.findOne({ email });
-  }
-
-  async update(id, data) {
-    return await UserModel.findByIdAndUpdate(id, data, { new: true });
-  }
-
-  async delete(id) {
-    return await UserModel.findByIdAndDelete(id);
-  }
-
-  async updatePassword(id, newHashedPassword) {
-    return await UserModel.findByIdAndUpdate(id, { password: newHashedPassword });
-  }
+  getAll = () => userDAO.getAll();
+  getById = (uid) => userDAO.getById(uid);
+  getByEmail = (email) => userDAO.getByEmail(email);
+  create = (data) => userDAO.create(data);
+  update = (uid, data) => userDAO.update(uid, data);
+  delete = (uid) => userDAO.delete(uid);
+  updatePassword = (uid, newPassword) => userDAO.updatePassword(uid, newPassword);
 }
 
 export default new UserRepository();

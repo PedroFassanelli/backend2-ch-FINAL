@@ -14,5 +14,4 @@ router.get('/restore-password', (req, res) => {
 });
 router.post('/restore-password', sessionController.restorePassword);
 
-
 export default router;

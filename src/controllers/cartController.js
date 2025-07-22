@@ -17,7 +17,7 @@ class CartController {
       if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
       res.json(cart);
     } catch (error) {
-      res.status(500).json({ message: 'Error al obtener carrito', error });
+      res.status(500).json({ message: 'Error al obtener carrito', error: error.message });
     }
   }
 
@@ -34,7 +34,7 @@ class CartController {
       res.json({ message: 'Producto agregado al carrito', cart: updatedCart });
     } catch (error) {
       console.log(error)
-      res.status(500).json({ message: 'Error al agregar producto', error });
+      res.status(500).json({ message: 'Error al agregar producto', error: error.message  });
     }
   }
 
@@ -46,7 +46,7 @@ class CartController {
       const updatedCart = await CartService.updateProductQuantity(cid, pid, quantity);
       res.json({ message: 'Cantidad actualizada', cart: updatedCart });
     } catch (error) {
-      res.status(500).json({ message: 'Error al actualizar cantidad', error });
+      res.status(500).json({ message: 'Error al actualizar cantidad', error: error.message  });
     }
   }
 
@@ -57,7 +57,7 @@ class CartController {
       const updatedCart = await CartService.deleteProduct(cid, pid);
       res.json({ message: 'Producto eliminado del carrito', cart: updatedCart });
     } catch (error) {
-      res.status(500).json({ message: 'Error al eliminar producto', error });
+      res.status(500).json({ message: 'Error al eliminar producto', error: error.message  });
     }
   }
 
@@ -80,7 +80,19 @@ class CartController {
       const clearedCart = await CartService.deleteAllProducts(cid);
       res.json({ message: 'Carrito vaciado', cart: clearedCart });
     } catch (error) {
-      res.status(500).json({ message: 'Error al vaciar el carrito', error });
+      res.status(500).json({ message: 'Error al vaciar el carrito', error: error.message  });
+    }
+  }
+
+  async purchaseCart(req, res) {
+    try {
+      const cid = req.params.cid;
+      const purchaserEmail = req.user.email;
+      const result = await CartService.purchaseCart(cid, purchaserEmail);
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ message: 'Error al procesar la compra', error });
     }
   }
 }

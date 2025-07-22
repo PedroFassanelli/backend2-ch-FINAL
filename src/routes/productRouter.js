@@ -30,5 +30,4 @@ router.delete(
   productController.delete
 );
 
-
 export default router;
