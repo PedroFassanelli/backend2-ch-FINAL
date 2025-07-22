@@ -108,3 +108,14 @@ Middleware:
    - Monto total
    - Email del comprador
    - Lista de productos comprados
+
+## ⚙️ Configuración del entorno
+
+Crear un archivo `.env` con el siguiente contenido:
+
+```env
+PORT=8080
+MONGO_URL=mongodb+srv://<usuario>:<contraseña>@<cluster>.mongodb.net/ecommerce?retryWrites=true&w=majority
+JWT_SECRET=clave_secreta
+MAIL_USER=correo
+MAIL_PASS=password
