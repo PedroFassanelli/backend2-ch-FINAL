@@ -3,7 +3,7 @@ import { ProductService } from '../repositories/index.js';
 class ProductController {
   async getAll(req, res) {
     try {
-      const products = await ProductService.getAllProducts();
+      const products = await ProductService.getAllProducts(req.query);
       res.json(products);
     } catch (error) {
       console.log(error)

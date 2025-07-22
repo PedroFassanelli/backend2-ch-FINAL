@@ -3,7 +3,7 @@ export default class ProductRepository {
     this.dao = dao;
   }
 
-  getAllProducts = () => this.dao.getAllProducts();
+  getAllProducts = (params = {}) => this.dao.getAllProducts(params);
   getProductByID = (pid) => this.dao.getProductByID(pid);
   createProduct = (productData) => this.dao.createProduct(productData);
   updateProduct = (pid, updateData) => this.dao.updateProduct(pid, updateData);
